@@ -1,4 +1,4 @@
-from HFQNetUnion import hfqRequest
+from hfqPaNet import hfqRequest
 from bs4 import BeautifulSoup
 import os
 

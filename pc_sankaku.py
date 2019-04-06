@@ -2,9 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
-import threading, time
+import threading
+from hfqPaNet import hfqRequest
 
-begin_index = 630000
+
+begin_index = 650000
 max_index = 715418
 thread_num = 5;
 loop_time_index = 0;
@@ -15,7 +17,7 @@ loop4_index = begin_index + 3
 loop5_index = begin_index + 4
 
 
-class sankakuUrl():
+class SankakuUrl():
 
     def __init__(self):
         # 浏览器请求头（大部分网站没有这个请求头会报错、请务必加上哦）
@@ -23,7 +25,7 @@ class sankakuUrl():
 
     #pa
     def paurlrequest(self, url):
-        content = requests.get(url, headers=self.headers)
+        content = hfqRequest.get(url, 3)
         return content
 
     def paAll(self, urlhref, index):
@@ -60,20 +62,14 @@ class sankakuUrl():
             f.close()
 
 # 执行
-pachong = sankakuUrl()
+pachong = SankakuUrl()
 pachong.pa_mkdir()
 
 # 爬50张就休息一下
 def loop(loop_index):
     while loop_index < max_index:
-        global loop_time_index
-        if loop_time_index == 50:
-            time.sleep(120)
-            loop_time_index = 0
-        else:
-            loop_time_index = loop_time_index + 1
-            pachong.paAll("https://idol.sankakucomplex.com/post/show/", loop_index)
-            loop_index = loop_index + thread_num
+        pachong.paAll("https://idol.sankakucomplex.com/post/show/", loop_index)
+        loop_index = loop_index + thread_num
 
 
 def loop1():
